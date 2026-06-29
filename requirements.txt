@@ -1,0 +1,40 @@
+# Core ML
+torch>=2.0.0
+transformers>=4.30.0
+datasets>=2.12.0
+accelerate>=0.20.0
+tokenizers>=0.13.0
+
+# AST Parsing
+tree-sitter>=0.20.1
+tree-sitter-languages>=1.7.0
+javalang>=0.13.0
+
+# Scientific computing
+numpy>=1.24.0
+scipy>=1.10.0
+scikit-learn>=1.2.0
+
+# Data handling
+pandas>=2.0.0
+
+# Configuration
+pyyaml>=6.0
+omegaconf>=2.3.0
+
+# Utilities
+tqdm>=4.65.0
+click>=8.1.0
+joblib>=1.2.0
+
+# Serialization / storage
+h5py>=3.8.0
+
+# Visualization
+matplotlib>=3.7.0
+seaborn>=0.12.0
+tensorboard>=2.13.0
+
+# Development / testing
+pytest>=7.3.0
+pytest-cov>=4.0.0

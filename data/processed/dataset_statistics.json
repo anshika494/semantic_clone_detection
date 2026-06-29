@@ -1,0 +1,53 @@
+{
+  "train": {
+    "total_pairs": 3600,
+    "clone_pairs": 1800,
+    "non_clone_pairs": 1800,
+    "clone_ratio": 0.5,
+    "type_distribution": {
+      "0": 1800,
+      "3": 1800
+    },
+    "token_stats": {
+      "code1_mean": 61.379444444444445,
+      "code1_median": 52.0,
+      "code1_max": 101,
+      "code2_mean": 61.77111111111111,
+      "code2_median": 52.0
+    }
+  },
+  "val": {
+    "total_pairs": 400,
+    "clone_pairs": 200,
+    "non_clone_pairs": 200,
+    "clone_ratio": 0.5,
+    "type_distribution": {
+      "0": 200,
+      "3": 200
+    },
+    "token_stats": {
+      "code1_mean": 64.6625,
+      "code1_median": 52.0,
+      "code1_max": 101,
+      "code2_mean": 63.885,
+      "code2_median": 52.0
+    }
+  },
+  "test": {
+    "total_pairs": 1000,
+    "clone_pairs": 500,
+    "non_clone_pairs": 500,
+    "clone_ratio": 0.5,
+    "type_distribution": {
+      "0": 500,
+      "3": 500
+    },
+    "token_stats": {
+      "code1_mean": 63.247,
+      "code1_median": 52.0,
+      "code1_max": 101,
+      "code2_mean": 62.099,
+      "code2_median": 52.0
+    }
+  }
+}

@@ -1,0 +1,156 @@
+# ============================================================
+# Semantic Code Clone Detection - Master Configuration
+# ============================================================
+
+project:
+  name: "semantic-clone-detection"
+  version: "1.0.0"
+  seed: 42
+
+# ----------------------------------------------------------
+# Dataset Configuration
+# ----------------------------------------------------------
+dataset:
+  name: "BigCloneBench"
+  root_dir: "data/raw/bigclonebench"
+  processed_dir: "data/processed"
+  embeddings_dir: "data/embeddings"
+
+  # BigCloneBench specifics
+  ijadataset_dir: "data/raw/bigclonebench/IJaDataset"
+  bcb_db_path: "data/raw/bigclonebench/bigclonebench.db"
+
+  # Clone type filtering
+  clone_types:
+    - "T3"   # Type III: near-miss clones
+    - "T4"   # Type IV: semantic clones
+
+  # Pair sampling
+  max_pairs_per_type: 50000
+  negative_ratio: 1.0   # ratio of non-clone to clone pairs
+  val_split: 0.1
+  test_split: 0.1
+
+# ----------------------------------------------------------
+# AST Processing
+# ----------------------------------------------------------
+ast:
+  parser: "tree-sitter"   # "tree-sitter" | "javalang"
+  language: "java"
+  grammar_path: "data/raw/tree-sitter-java"
+
+  # Linearization strategy
+  traversal: "preorder"   # "preorder" | "postorder" | "bfs"
+  include_node_types: true
+  include_values: true
+  max_token_length: 512
+
+# ----------------------------------------------------------
+# Preprocessing
+# ----------------------------------------------------------
+preprocessing:
+  remove_comments: true
+  normalize_identifiers: true
+  normalize_literals: true
+  lowercase: false
+  min_tokens: 10
+  max_tokens: 512
+
+  # Identifier normalization
+  identifier_token: "<ID>"
+  string_token: "<STR>"
+  number_token: "<NUM>"
+  type_token: "<TYPE>"
+
+# ----------------------------------------------------------
+# Model Configuration
+# ----------------------------------------------------------
+model:
+  # Base transformer
+  backbone: "microsoft/codebert-base"
+  # alternatives: "microsoft/graphcodebert-base", "Salesforce/codet5-base"
+
+  embedding_dim: 768
+  projection_dim: 256
+  dropout: 0.1
+
+  # Siamese network
+  siamese:
+    loss: "contrastive"   # "contrastive" | "triplet" | "cosine"
+    margin: 1.0           # for contrastive/triplet loss
+    temperature: 0.07     # for cosine similarity loss
+
+# ----------------------------------------------------------
+# Training Configuration
+# ----------------------------------------------------------
+training:
+  output_dir: "checkpoints"
+  epochs: 10
+  batch_size: 32
+  learning_rate: 2.0e-5
+  weight_decay: 0.01
+  warmup_ratio: 0.1
+  max_grad_norm: 1.0
+
+  # Optimizer
+  optimizer: "adamw"
+  scheduler: "cosine"
+
+  # Mixed precision
+  fp16: true
+
+  # Early stopping
+  early_stopping_patience: 3
+  early_stopping_metric: "val_f1"
+
+  # Logging
+  log_every_n_steps: 100
+  eval_every_n_steps: 500
+  save_best_only: true
+
+# ----------------------------------------------------------
+# Inference Configuration
+# ----------------------------------------------------------
+inference:
+  model_path: "checkpoints/best_model.pt"
+  batch_size: 64
+  threshold: 0.5          # cosine similarity threshold
+  threshold_search: true  # auto-search optimal threshold on val set
+  threshold_range: [0.3, 0.9]
+  threshold_steps: 60
+
+# ----------------------------------------------------------
+# Evaluation Configuration
+# ----------------------------------------------------------
+evaluation:
+  results_dir: "results"
+  bigcloneeval_dir: "data/raw/BigCloneEval"
+
+  metrics:
+    - "accuracy"
+    - "precision"
+    - "recall"
+    - "f1"
+    - "roc_auc"
+    - "pr_auc"
+
+  # Per clone-type evaluation
+  per_type_eval: true
+  clone_types:
+    T1: "Exact clones"
+    T2: "Renamed clones"
+    T3: "Near-miss clones"
+    T4: "Semantic clones"
+
+# ----------------------------------------------------------
+# Caching & Performance
+# ----------------------------------------------------------
+cache:
+  ast_cache_dir: "data/processed/ast_cache"
+  embedding_cache_dir: "data/processed/embedding_cache"
+  use_cache: true
+
+performance:
+  num_workers: 4
+  pin_memory: true
+  prefetch_factor: 2
